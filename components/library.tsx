@@ -1,61 +1,66 @@
 import * as React from 'react'
-import { getLibraries } from '@/app/actions'
-import { Button } from '@/components/ui/button'
-import { LibraryCreateButton } from '@/components/library-create-button'
+import { notFound, redirect } from 'next/navigation'
+import Link from 'next/link'
+
+import { AI } from '@/lib/chat/actions'
+import { LibraryChat } from '@/components/library-chat'
+import { Library } from '@/lib/types'
+import { getLibrary } from '@/app/actions'
 
 interface LibraryPageProps {
-  userId?: string
+  id: string
+  userId: string
   children?: React.ReactNode
 }
 
-const loadLibraries = React.cache(async (userId?: string) => {
-  return await getLibraries(userId)
+const loadLibrary = React.cache(async (libraryId: string, userId: string) => {
+  return await getLibrary(libraryId, userId)
 })
 
-export async function Library({ userId }: LibraryPageProps) {
-  const libraries = await loadLibraries(userId)
+export async function LibraryPage({ id, userId }: LibraryPageProps) {
+  const library: Library | null = await loadLibrary(id, userId)
+  if (!library) {
+    notFound()
+  }
+  // TODO: fetch threads in this library
 
   return (
-    <div className={'p-5'}>
-      <div className="lg:flex lg:items-center lg:justify-between">
-        <div className="min-w-0 flex-1">
-          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-            Library
-          </h2>
+    <AI initialAIState={{ chatId: id, messages: [] }}>
+      <div className={'p-5'}>
+        <div className="lg:flex lg:items-center lg:justify-between">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+              Library - {library.name}
+            </h2>
+          </div>
+          <div className="mt-5 flex lg:ml-4 lg:mt-0"></div>
         </div>
-        <div className="mt-5 flex lg:ml-4 lg:mt-0">
-          <LibraryCreateButton />
+        <div className="pt-5">
+          <LibraryChat />
         </div>
-      </div>
-      <div className="pt-5">
-        <ul
-          role="list"
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {libraries.map(lib => (
-            <li
-              key={`library-${lib.id}`}
-              className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
-            >
-              <div className="flex w-full items-center justify-between space-x-6 p-6">
-                <div className="flex-1 truncate">
-                  <div className="flex items-center space-x-3">
-                    <h3 className="truncate text-sm font-medium text-gray-900">
-                      {lib.name}
-                    </h3>
-                    <span className="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-blue-600 ring-1 ring-inset ring-green-600/20">
-                      {lib.threadCount}
-                    </span>
-                  </div>
-                  <p className="mt-1 truncate text-xs text-gray-500">
-                    {lib.createdAt}
+        <div className="pt-5">
+          <h2 className="text-xl font-bold text-gray-900">Threads</h2>
+          <ul role="list" className="divide-y divide-gray-100">
+            <li className="flex justify-between gap-x-6 py-5">
+              <div className="flex min-w-0 gap-x-4">
+                <div className="min-w-0 flex-auto">
+                  <p className="text-sm font-semibold leading-6 text-gray-900">
+                    thread name
+                  </p>
+                  <p className="mt-1 truncate text-xs leading-5 text-gray-500">
+                    thread messages
                   </p>
                 </div>
               </div>
+              <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                <p className="mt-1 text-xs leading-5 text-gray-500">
+                  Last updated <time datetime="2023-01-23T13:23Z">3h ago</time>
+                </p>
+              </div>
             </li>
-          ))}
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
+    </AI>
   )
 }

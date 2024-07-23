@@ -51,6 +51,16 @@ export async function saveLibrary(library: Library) {
   }
 }
 
+export async function getLibrary(id: string, userId: string) {
+  const library = await kv.hgetall<Library>(`library:${id}`)
+
+  if (!library || (userId && library.userId !== userId)) {
+    return null
+  }
+
+  return library
+}
+
 export async function getChats(userId?: string | null) {
   if (!userId) {
     return []

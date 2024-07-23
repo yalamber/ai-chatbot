@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@/auth'
 import { Session } from '@/lib/types'
-import { Library } from '@/components/library'
+import { Libraries } from '@/components/libraries'
 
 export const metadata = {
   title: 'CognitiveView - Library'
@@ -17,7 +17,7 @@ export default async function IndexPage() {
 
   return (
     <div className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]">
-      <Library userId={userId} />
+      <Libraries userId={userId} />
     </div>
   )
 }
