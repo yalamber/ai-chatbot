@@ -24,13 +24,12 @@ export async function SidebarList({ userId }: SidebarListProps) {
             <SidebarItems chats={chats} />
           </div>
         ) : (
-          <div className="p-8 text-center">
-            <p className="text-sm text-muted-foreground">No chat history</p>
+          <div className="p-2 text-center">
+            <p className="text-sm text-muted-foreground">No threads</p>
           </div>
         )}
       </div>
       <div className="flex items-center justify-between p-4">
-        <ThemeToggle />
         <ClearHistory clearChats={clearChats} isEnabled={chats?.length > 0} />
       </div>
     </div>
