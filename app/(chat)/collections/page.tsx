@@ -1,21 +1,22 @@
-import { nanoid } from '@/lib/utils'
-import { AI } from '@/lib/chat/actions'
+import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { Session } from '@/lib/types'
-import { getMissingKeys } from '@/app/actions'
+import { Collection } from '@/components/collection'
 
 export const metadata = {
-  title: 'Next.js AI Chatbot'
+  title: 'CognitiveView - Collections'
 }
 
 export default async function IndexPage() {
-  const id = nanoid()
   const session = (await auth()) as Session
-  const missingKeys = await getMissingKeys()
+  if (!session?.user) {
+    redirect(`/login?next=/collections`)
+  }
+  const userId = session.user.id as string
 
   return (
-    <AI initialAIState={{ chatId: id, messages: [] }}>
-      <div></div>
-    </AI>
+    <div className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]">
+      <Collection userId={userId}/>
+    </div>
   )
 }
