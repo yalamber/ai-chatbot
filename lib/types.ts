@@ -39,3 +39,10 @@ export interface User extends Record<string, any> {
   password: string
   salt: string
 }
+
+export interface Library extends Record<string, any> {
+  id: string
+  name: string
+  threadCount: number
+  createdAt: string
+}

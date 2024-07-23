@@ -5,7 +5,51 @@ import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 
 import { auth } from '@/auth'
-import { type Chat } from '@/lib/types'
+import { type Chat, type Library } from '@/lib/types'
+
+export async function getLibraries(userId?: string | null) {
+  if (!userId) {
+    return []
+  }
+
+  try {
+    const pipeline = kv.pipeline()
+    const libraries: string[] = await kv.zrange(
+      `user:library:${userId}`,
+      0,
+      -1,
+      {
+        rev: true
+      }
+    )
+
+    for (const library of libraries) {
+      pipeline.hgetall(library)
+    }
+
+    const results = await pipeline.exec()
+
+    return results as Library[]
+  } catch (error) {
+    return []
+  }
+}
+
+export async function saveLibrary(library: Library) {
+  const session = await auth()
+
+  if (session && session.user) {
+    const pipeline = kv.pipeline()
+    pipeline.hmset(`library:${library.id}`, library)
+    pipeline.zadd(`user:library:${library.userId}`, {
+      score: Date.now(),
+      member: `library:${library.id}`
+    })
+    await pipeline.exec()
+  } else {
+    return
+  }
+}
 
 export async function getChats(userId?: string | null) {
   if (!userId) {

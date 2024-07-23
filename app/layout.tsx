@@ -14,9 +14,9 @@ export const metadata = {
     : undefined,
   title: {
     default: 'Copilot',
-    template: `%s - Copilot AI Chatbot`
+    template: `CognitiveView - Copilot AI`
   },
-  description: 'An AI-powered chatbot template built with Next.js and Vercel.',
+  description: 'CognitiveView Copilot',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
