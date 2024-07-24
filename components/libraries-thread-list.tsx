@@ -35,9 +35,7 @@ export function ThreadItems({ threads }: ThreadItemsProps) {
                         </div>
                       </div>
                       <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                        <p className="mt-1 text-xs leading-5">
-                          <time datetime="2023-01-23T13:23Z">3h ago</time>
-                        </p>
+                        <p className="mt-1 text-xs leading-5">3h ago</p>
                       </div>
                     </div>
                   </Link>

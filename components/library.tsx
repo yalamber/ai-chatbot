@@ -66,7 +66,7 @@ export async function LibraryPage({ id, userId, session }: LibraryPageProps) {
                     </div>
                     <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
                       <p className="mt-1 text-xs leading-5 text-gray-500">
-                        <time datetime="2023-01-23T13:23Z">3h ago</time>
+                        3h ago
                       </p>
                     </div>
                   </Link>
