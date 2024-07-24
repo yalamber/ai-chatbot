@@ -27,9 +27,7 @@ export async function Libraries({ userId }: LibraryPageProps) {
     <div className={'p-5'}>
       <div className="flex">
         <div className="w-2/3 p-5">
-          <h2 className="text-xl font-bold text-gray-900 sm:text-2xl border-b">
-            Threads
-          </h2>
+          <h2 className="text-xl font-bold sm:text-2xl border-b">Threads</h2>
           <div>
             <React.Suspense
               fallback={
@@ -50,9 +48,7 @@ export async function Libraries({ userId }: LibraryPageProps) {
         <div className="w-1/3 p-5">
           <div className="lg:flex lg:items-center lg:justify-between  border-b">
             <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-bold text-gray-900 sm:text-2xl">
-                Library
-              </h1>
+              <h1 className="text-xl font-bold sm:text-2xl">Library</h1>
             </div>
             <div className="mt-5 flex lg:ml-4 lg:mt-0">
               <LibraryCreateButton />
@@ -62,13 +58,13 @@ export async function Libraries({ userId }: LibraryPageProps) {
             {libraries.map(lib => (
               <li
                 key={`library-${lib.id}`}
-                className="mt-4 divide-y divide-gray-200 rounded-lg bg-white shadow"
+                className="mt-4 divide-y divide-gray-200 rounded-lg shadow bg-zinc-50 transition-colors hover:bg-zinc-200/40 dark:bg-zinc-800"
               >
                 <Link href={`/library/${lib.id}`}>
                   <div className="flex w-full items-center justify-between space-x-6 p-6">
                     <div className="flex-1 truncate">
                       <div className="flex items-center space-x-3">
-                        <h3 className="truncate text-sm font-medium text-gray-900">
+                        <h3 className="truncate text-sm font-medium">
                           {lib.name}
                         </h3>
                         <span className="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-blue-600 ring-1 ring-inset ring-green-600/20">

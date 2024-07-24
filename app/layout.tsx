@@ -1,5 +1,6 @@
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import NextTopLoader from 'nextjs-toploader'
 
 import '@/app/globals.css'
 import { cn } from '@/lib/utils'
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
+          <NextTopLoader />
           <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex flex-col flex-1 bg-muted/50">{children}</main>

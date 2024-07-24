@@ -3,8 +3,7 @@ import Link from 'next/link'
 
 import { auth } from '@/auth'
 import { cn } from '@/lib/utils'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { IconPlus } from '@/components/ui/icons'
+import { buttonVariants } from '@/components/ui/button'
 import { ChatHistory } from '@/components/chat-history'
 
 export async function SidebarDesktop() {
@@ -19,10 +18,15 @@ export async function SidebarDesktop() {
       <div className="flex flex-col h-full">
         <div>
           <div className="mb-2 px-2 pt-2">
-            <Button className="w-full">
-              Threads &nbsp; &nbsp;
-              <IconPlus className="-translate-x-2 stroke-2" />
-            </Button>
+            <Link
+              href="/new-thread"
+              className={cn(
+                buttonVariants({ variant: 'default' }),
+                'h-10 w-full '
+              )}
+            >
+              Threads +
+            </Link>
           </div>
           <div className="mb-2 px-2 pt-2">
             <Link

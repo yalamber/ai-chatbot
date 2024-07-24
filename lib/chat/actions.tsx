@@ -485,6 +485,7 @@ async function submitUserMessage(content: string) {
 }
 
 export type AIState = {
+  libraryId?: string
   chatId: string
   messages: Message[]
 }
@@ -523,7 +524,7 @@ export const AI = createAI<AIState, UIState>({
     const session = await auth()
 
     if (session && session.user) {
-      const { chatId, messages } = state
+      const { libraryId, chatId, messages } = state
 
       const createdAt = new Date()
       const userId = session.user.id as string
@@ -541,7 +542,7 @@ export const AI = createAI<AIState, UIState>({
         path
       }
 
-      await saveChat(chat)
+      await saveChat(chat, libraryId)
     } else {
       return
     }

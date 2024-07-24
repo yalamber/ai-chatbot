@@ -68,9 +68,14 @@ export async function getLibraryThreads(libraryId: string) {
 
   try {
     const pipeline = kv.pipeline()
-    const threads: string[] = await kv.zrange(`library:threads:${libraryId}`, 0, -1, {
-      rev: true
-    })
+    const threads: string[] = await kv.zrange(
+      `library:threads:${libraryId}`,
+      0,
+      -1,
+      {
+        rev: true
+      }
+    )
 
     for (const thread of threads) {
       pipeline.hgetall(thread)
@@ -205,7 +210,7 @@ export async function shareChat(id: string) {
   return payload
 }
 
-export async function saveChat(chat: Chat) {
+export async function saveChat(chat: Chat, libraryId?: string) {
   const session = await auth()
 
   if (session && session.user) {
@@ -215,6 +220,12 @@ export async function saveChat(chat: Chat) {
       score: Date.now(),
       member: `chat:${chat.id}`
     })
+    if (libraryId) {
+      pipeline.zadd(`library:threads:${libraryId}`, {
+        score: Date.now(),
+        member: `chat:${chat.id}`
+      })
+    }
     await pipeline.exec()
   } else {
     return
