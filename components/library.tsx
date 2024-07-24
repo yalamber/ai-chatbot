@@ -43,9 +43,6 @@ export async function LibraryPage({ id, userId }: LibraryPageProps) {
           <div className="mt-5 flex lg:ml-4 lg:mt-0"></div>
         </div>
         <div className="pt-5">
-          <LibraryChat libraryId={id} />
-        </div>
-        <div className="pt-5">
           <h2 className="text-xl font-bold">Threads</h2>
           {libraryThreads.length ? (
             <ul role="list" className="divide-y">
@@ -78,6 +75,8 @@ export async function LibraryPage({ id, userId }: LibraryPageProps) {
             <>No threads in this library</>
           )}
         </div>
+
+        <LibraryChat libraryId={id} />
       </div>
     </AI>
   )
