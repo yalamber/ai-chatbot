@@ -1,5 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 
+import { AI } from '@/lib/chat/actions'
+import { nanoid } from '@/lib/utils'
 import { auth } from '@/auth'
 import { getLibrary } from '@/app/actions'
 import { Session } from '@/lib/types'
@@ -16,6 +18,7 @@ export const metadata = {
 }
 
 export default async function Library({ params }: LibraryPageProps) {
+  const id = nanoid()
   const session = (await auth()) as Session
   if (!session?.user) {
     redirect(`/login?next=/library`)
@@ -32,8 +35,10 @@ export default async function Library({ params }: LibraryPageProps) {
   }
 
   return (
-    <div className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]">
-      <LibraryPage id={params.id} userId={userId} />
-    </div>
+    <AI initialAIState={{ libraryId: params.id, chatId: id, messages: [] }}>
+      <div className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]">
+        <LibraryPage id={params.id} userId={userId} session={session} />
+      </div>
+    </AI>
   )
 }
