@@ -33,6 +33,7 @@ export function LibraryChat({ session }: LibraryChatProps) {
         ref={formRef}
         onSubmit={async (e: any) => {
           e.preventDefault()
+          
         }}
       >
         <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background sm:rounded-md sm:border">
