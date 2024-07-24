@@ -61,6 +61,29 @@ export async function getLibrary(id: string, userId: string) {
   return library
 }
 
+export async function getLibraryThreads(libraryId: string) {
+  if (!libraryId) {
+    return []
+  }
+
+  try {
+    const pipeline = kv.pipeline()
+    const threads: string[] = await kv.zrange(`library:threads:${libraryId}`, 0, -1, {
+      rev: true
+    })
+
+    for (const thread of threads) {
+      pipeline.hgetall(thread)
+    }
+
+    const results = await pipeline.exec()
+
+    return results as Chat[]
+  } catch (error) {
+    return []
+  }
+}
+
 export async function getChats(userId?: string | null) {
   if (!userId) {
     return []
