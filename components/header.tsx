@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'
@@ -29,8 +30,7 @@ async function UserOrLogin() {
         </>
       ) : (
         <Link href="/new" rel="nofollow">
-          <IconNextChat className="size-6 mr-2 dark:hidden" inverted />
-          <IconNextChat className="hidden size-6 mr-2 dark:block" />
+          <Image src="/logo.png" width="50" height="40" alt="cognitive view" />
         </Link>
       )}
       <div className="flex items-center">
@@ -55,9 +55,7 @@ export function Header() {
           <UserOrLogin />
         </React.Suspense>
       </div>
-      <div className="flex items-center justify-end space-x-2">
-       
-      </div>
+      <div className="flex items-center justify-end space-x-2"></div>
     </header>
   )
 }
