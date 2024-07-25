@@ -1,33 +1,51 @@
-import * as React from 'react'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
+'use client'
 
+import * as React from 'react'
+import { nanoid } from 'nanoid'
+import { usePathname, notFound } from 'next/navigation'
+import Link from 'next/link'
+import { useUIState, useAIState } from 'ai/rsc'
+
+import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { LibraryChat } from '@/components/library-chat'
 import { Library, Chat, Session } from '@/lib/types'
-import { getLibrary, getLibraryThreads } from '@/app/actions'
 
 interface LibraryPageProps {
-  id: string
+  threadId: string
   userId: string
   children?: React.ReactNode
   session: Session
+  library: Library
+  libraryThreads: Chat[]
 }
 
-const loadLibrary = React.cache(async (libraryId: string, userId: string) => {
-  return await getLibrary(libraryId, userId)
-})
-
-const loadLibraryThreads = React.cache(async (libraryId: string) => {
-  return await getLibraryThreads(libraryId)
-})
-
-export async function LibraryPage({ id, userId, session }: LibraryPageProps) {
-  const library: Library | null = await loadLibrary(id, userId)
-  const libraryThreads: Chat[] | null = await loadLibraryThreads(id)
+export function LibraryPage({
+  threadId,
+  userId,
+  session,
+  library,
+  libraryThreads
+}: LibraryPageProps) {
   if (!library) {
     notFound()
   }
-  // TODO: fetch threads in this library
+  const [_, setNewChatId] = useLocalStorage('newChatId', threadId)
+  const path = usePathname()
+
+  const [messages] = useUIState()
+  const [aiState] = useAIState()
+
+  React.useEffect(() => {
+    if (session?.user) {
+      if (!path.includes('chat') && messages.length === 1) {
+        window.history.replaceState({}, '', `/chat/${threadId}`)
+      }
+    }
+  }, [threadId, path, session?.user, messages])
+
+  React.useEffect(() => {
+    setNewChatId(threadId)
+  })
 
   return (
     <div className={'p-5'}>
@@ -39,7 +57,7 @@ export async function LibraryPage({ id, userId, session }: LibraryPageProps) {
         </div>
         <div className="mt-5 flex lg:ml-4 lg:mt-0"></div>
       </div>
-      <div className="p-5 w-1/2">
+      <div className="py-5 w-1/2">
         <LibraryChat session={session} />
       </div>
       <div className="pt-5">
