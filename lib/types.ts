@@ -46,3 +46,10 @@ export interface Library extends Record<string, any> {
   threadCount: number
   createdAt: string
 }
+
+export interface Collection extends Record<string, any> {
+  id: string
+  name: string
+  linkToCollection: string
+  createdAt: string
+}

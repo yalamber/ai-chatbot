@@ -70,7 +70,8 @@ export enum ResultCode {
   UnknownError = 'UNKNOWN_ERROR',
   UserCreated = 'USER_CREATED',
   UserLoggedIn = 'USER_LOGGED_IN',
-  LibraryCreated = 'LIBRARY_CREATED'
+  LibraryCreated = 'LIBRARY_CREATED',
+  CollectionCreated = 'COLLECTION_CREATED'
 }
 
 export const getMessageFromCode = (resultCode: string) => {
@@ -89,5 +90,7 @@ export const getMessageFromCode = (resultCode: string) => {
       return 'Logged in!'
     case ResultCode.LibraryCreated:
       return 'Library created'
+    case ResultCode.CollectionCreated:
+      return 'Collection created'
   }
 }

@@ -1,6 +1,8 @@
 import * as React from 'react'
-import { getLibraries } from '@/app/actions'
+import moment from 'moment'
+import { getCollections } from '@/app/actions'
 import { CollectionCreateButton } from './collection-create-button'
+import { deleteCollection } from '@/app/(chat)/collections/actions'
 import { TrashIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 
 interface CollectionPageProps {
@@ -8,13 +10,12 @@ interface CollectionPageProps {
   children?: React.ReactNode
 }
 
-const loadLibraries = React.cache(async (userId?: string) => {
-  return await getLibraries(userId)
+const loadCollections = React.cache(async (userId?: string) => {
+  return await getCollections(userId)
 })
 
 export async function Collection({ userId }: CollectionPageProps) {
-  const libraries = await loadLibraries(userId)
-
+  const collections = await loadCollections(userId)
   return (
     <div className={'p-5'}>
       <div className="lg:flex lg:items-center lg:justify-between">
@@ -34,24 +35,49 @@ export async function Collection({ userId }: CollectionPageProps) {
               <th className="px-4 text-left py-2 border-b">Name</th>
               <th className="px-4 text-left py-2 border-b">Link</th>
               <th className="px-4 text-left py-2 border-b">Document</th>
+              <th className="px-4 text-left py-2 border-b">Date Created</th>
               <th className="px-4 text-left py-2 border-b">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="px-4 py-2  border-b">Test Name</td>
-              <td className="px-4 py-2  border-b">Test Link</td>
-              <td className="px-4 py-2  border-b">Test Document</td>
-              <td className="px-4 py-2  border-b gap-4">
-                <div className="flex gap-3">
-                  <div title="View"><EyeOpenIcon  className="size-5 cursor-pointer" /></div>
-                  <div title="Delete"><TrashIcon color='red'  className="size-5 cursor-pointer" /></div>
-                </div>
-              </td>
-            </tr>
-            {/* <tr>
-              <td colSpan={4} className="px-4 py-2 text-center border-b">No Collection</td>
-            </tr> */}
+            {collections?.length > 0 &&
+              collections.map(collection => {
+                const parsedDate = moment(
+                  collection?.createdAt,
+                  'ddd MMM DD YYYY HH:mm:ss ZZ'
+                )
+                const createdDate = parsedDate.format('DD-MM-YYYY, hh:mm:ss')
+                return (
+                  <tr key={collection?.id}>
+                    <td className="px-4 py-2  border-b">{collection?.name}</td>
+                    <td className="px-4 py-2  border-b">
+                      {collection?.linkToCollection}
+                    </td>
+                    <td className="px-4 py-2  border-b">Document</td>
+                    <td className="px-4 py-2  border-b">{createdDate}</td>
+                    <td className="px-4 py-2  border-b gap-4">
+                      <div className="flex gap-3">
+                        {/* <div title="View">
+                      <EyeOpenIcon className="size-5 cursor-pointer" />
+                    </div> */}
+                        <div title="Delete">
+                          <TrashIcon
+                            color="red"
+                            className="size-5 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+            {collections?.length === 0 && (
+              <tr>
+                <td colSpan={4} className="px-4 py-2 text-center border-b">
+                  No Collection
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
