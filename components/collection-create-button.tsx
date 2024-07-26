@@ -5,7 +5,7 @@ import { useFormState, useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
-import { addLibrary } from '@/app/(chat)/library/actions'
+import { addCollection } from '@/app/(chat)/collections/actions'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -19,10 +19,10 @@ import { getMessageFromCode } from '@/lib/utils'
 import { IconSpinner } from '@/components/ui/icons'
 
 export function CollectionCreateButton() {
-  const [libraryCreateDialogOpen, setLibraryCreateDialogOpen] =
+  const [collectionCreateDialogOpen, setCollectionCreateDialogOpen] =
     React.useState(false)
   const router = useRouter()
-  const [result, dispatch] = useFormState(addLibrary, undefined)
+  const [result, dispatch] = useFormState(addCollection, undefined)
 
   React.useEffect(() => {
     if (result) {
@@ -30,7 +30,7 @@ export function CollectionCreateButton() {
         toast.error(getMessageFromCode(result.resultCode))
       } else {
         toast.success(getMessageFromCode(result.resultCode))
-        setLibraryCreateDialogOpen(false)
+        setCollectionCreateDialogOpen(false)
         router.refresh()
       }
     }
@@ -38,10 +38,10 @@ export function CollectionCreateButton() {
 
   return (
     <>
-      <Button onClick={() => setLibraryCreateDialogOpen(true)}>Create</Button>
+      <Button onClick={() => setCollectionCreateDialogOpen(true)}>Create</Button>
       <Dialog
-        open={libraryCreateDialogOpen}
-        onOpenChange={setLibraryCreateDialogOpen}
+        open={collectionCreateDialogOpen}
+        onOpenChange={setCollectionCreateDialogOpen}
       >
         <DialogContent>
           <DialogHeader>
@@ -61,9 +61,9 @@ export function CollectionCreateButton() {
             <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-zinc-800" />
             <input
               className="peer block w-full rounded-md border bg-zinc-50 px-2 py-[9px] text-sm outline-none placeholder:text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950"
-              id="name"
+              id="linkToCollection"
               type="text"
-              name="name"
+              name="linkToCollection"
               placeholder="Link to collection"
               required
             />

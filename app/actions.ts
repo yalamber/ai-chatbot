@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 
 import { auth } from '@/auth'
-import { type Chat, type Library } from '@/lib/types'
+import { type Chat, type Library, type Collection } from '@/lib/types'
 
 export async function getLibraries(userId?: string | null) {
   if (!userId) {
@@ -241,4 +241,48 @@ export async function getMissingKeys() {
   return keysRequired
     .map(key => (process.env[key] ? '' : key))
     .filter(key => key !== '')
+}
+
+export async function getCollections (userId?: string | null) {
+  if (!userId) {
+    return []
+  }
+
+  try {
+    const pipeline = kv.pipeline()
+    const collections: string[] = await kv.zrange(
+      `user:collection:${userId}`,
+      0,
+      -1,
+      {
+        rev: true
+      }
+    )
+
+    for (const collection of collections) {
+      pipeline.hgetall(collection)
+    }
+
+    const results = await pipeline.exec()
+
+    return results as Library[]
+  } catch (error) {
+    return []
+  }
+}
+
+export async function saveCollection(collection: Collection) {
+  const session = await auth()
+
+  if (session && session.user) {
+    const pipeline = kv.pipeline()
+    pipeline.hmset(`collection:${collection.id}`, collection)
+    pipeline.zadd(`user:collection:${collection.userId}`, {
+      score: Date.now(),
+      member: `collection:${collection.id}`
+    })
+    await pipeline.exec()
+  } else {
+    return
+  }
 }
