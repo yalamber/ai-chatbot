@@ -71,7 +71,8 @@ export enum ResultCode {
   UserCreated = 'USER_CREATED',
   UserLoggedIn = 'USER_LOGGED_IN',
   LibraryCreated = 'LIBRARY_CREATED',
-  CollectionCreated = 'COLLECTION_CREATED'
+  CollectionCreated = 'COLLECTION_CREATED',
+  NoCollection = 'NO_COLLECTION'
 }
 
 export const getMessageFromCode = (resultCode: string) => {
@@ -92,5 +93,7 @@ export const getMessageFromCode = (resultCode: string) => {
       return 'Library created'
     case ResultCode.CollectionCreated:
       return 'Collection created'
+    case ResultCode.NoCollection:
+      return 'Collection does not exists!'
   }
 }

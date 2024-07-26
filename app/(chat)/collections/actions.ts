@@ -1,5 +1,7 @@
 'use server'
 import { z } from 'zod'
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 import { saveCollection } from '@/app/actions'
 import { ResultCode } from '@/lib/utils'
@@ -72,9 +74,9 @@ export async function addCollection(
 }
 
 export async function deleteCollection(
-  _prevState: Result | undefined,
   id: string
 ) {
+  console.log("id here", id)
   const session = await auth()
   if (!session?.user) {
     return {
@@ -93,7 +95,15 @@ export async function deleteCollection(
 
   const collection = await getCollection(userId, id)
 
+  if (!collection) {
+    return {
+      type: 'error',
+      resultCode: ResultCode.NoCollection
+    }
+  }
 
+  await kv.del(`collection:${id}`)
 
-
+  revalidatePath('/collections')
+  return redirect('/collections')
 }

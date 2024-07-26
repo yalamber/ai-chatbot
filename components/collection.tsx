@@ -2,7 +2,7 @@ import * as React from 'react'
 import moment from 'moment'
 import { getCollections } from '@/app/actions'
 import { CollectionCreateButton } from './collection-create-button'
-import { deleteCollection } from '@/app/(chat)/collections/actions'
+import DeleteCollection from './delete-collection'
 import { TrashIcon, EyeOpenIcon } from '@radix-ui/react-icons'
 
 interface CollectionPageProps {
@@ -16,6 +16,7 @@ const loadCollections = React.cache(async (userId?: string) => {
 
 export async function Collection({ userId }: CollectionPageProps) {
   const collections = await loadCollections(userId)
+  console.log("collections", collections)
   return (
     <div className={'p-5'}>
       <div className="lg:flex lg:items-center lg:justify-between">
@@ -42,6 +43,7 @@ export async function Collection({ userId }: CollectionPageProps) {
           <tbody>
             {collections?.length > 0 &&
               collections.map(collection => {
+                if(!collection) return null;
                 const parsedDate = moment(
                   collection?.createdAt,
                   'ddd MMM DD YYYY HH:mm:ss ZZ'
@@ -58,14 +60,9 @@ export async function Collection({ userId }: CollectionPageProps) {
                     <td className="px-4 py-2  border-b gap-4">
                       <div className="flex gap-3">
                         {/* <div title="View">
-                      <EyeOpenIcon className="size-5 cursor-pointer" />
-                    </div> */}
-                        <div title="Delete">
-                          <TrashIcon
-                            color="red"
-                            className="size-5 cursor-pointer"
-                          />
-                        </div>
+                          <EyeOpenIcon className="size-5 cursor-pointer" />
+                        </div> */}
+                        <DeleteCollection id={collection?.id}/>
                       </div>
                     </td>
                   </tr>
