@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 import Textarea from 'react-textarea-autosize'
 import { usePathname, useRouter } from 'next/navigation'
 import { useActions, useUIState, useAIState } from 'ai/rsc'
-
+import { Session } from '@/lib/types'
 import { useScrollAnchor } from '@/lib/hooks/use-scroll-anchor'
 import { ChatList } from '@/components/chat-list'
 import { UserMessage } from './stocks/message'
