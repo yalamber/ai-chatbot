@@ -16,7 +16,6 @@ const loadCollections = React.cache(async (userId?: string) => {
 
 export async function Collection({ userId }: CollectionPageProps) {
   const collections = await loadCollections(userId)
-  console.log("collections", collections)
   return (
     <div className={'p-5'}>
       <div className="lg:flex lg:items-center lg:justify-between">
@@ -28,7 +27,7 @@ export async function Collection({ userId }: CollectionPageProps) {
         </div>
       </div>
       <div className="pt-5">
-        <table className="border border-zinc-800 w-full">
+        <table className="border border-gray-300  dark:border-zinc-800 w-full">
           <thead>
             <tr>
               <th className="px-4 text-left py-2 border-b">Name</th>
