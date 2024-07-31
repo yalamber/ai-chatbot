@@ -27,7 +27,7 @@ export async function Libraries({ userId }: LibraryPageProps) {
     <div className={'p-5'}>
       <div className="flex">
         <div className="w-2/3 p-5">
-          <h2 className="text-xl font-bold sm:text-2xl border-b">Threads</h2>
+          <h2 className="text-xl font-bold sm:text-2xl border-b pb-2">Threads</h2>
           <div>
             <React.Suspense
               fallback={
@@ -48,7 +48,7 @@ export async function Libraries({ userId }: LibraryPageProps) {
         <div className="w-1/3 p-5">
           <div className="lg:flex lg:items-center lg:justify-between  border-b">
             <div className="min-w-0 flex-1">
-              <h1 className="text-xl font-bold sm:text-2xl">Library</h1>
+              <h1 className="text-xl font-bold sm:text-2xl pb-2">Library</h1>
             </div>
             <div className="mt-5 flex lg:ml-4 lg:mt-0">
               <LibraryCreateButton />

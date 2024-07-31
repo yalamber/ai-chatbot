@@ -76,7 +76,6 @@ export async function addCollection(
 export async function deleteCollection(
   id: string
 ) {
-  console.log("id here", id)
   const session = await auth()
   if (!session?.user) {
     return {
@@ -103,6 +102,7 @@ export async function deleteCollection(
   }
 
   await kv.del(`collection:${id}`)
+  await kv.zrem(`user:collection:${session.user.id}`, `collection:${id}`)
 
   revalidatePath('/collections')
   return redirect('/collections')
