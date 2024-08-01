@@ -265,9 +265,9 @@ export async function addChatToLibrary(
       resultCode: ResultCode.InvalidSubmission
     }
   }
-  
+
   const chat = await getChat(chatId, session.user.id) as Chat
-  saveChat(chat, libraryId)
+  await saveChat(chat, libraryId)
 
   pipeline.zadd(`library:threads:${libraryId}`, {
     score: Date.now(),
