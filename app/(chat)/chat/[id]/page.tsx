@@ -1,6 +1,7 @@
+import * as React from 'react'
 import { type Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-
+import { getLibraries } from '@/app/actions'
 import { auth } from '@/auth'
 import { getChat, getMissingKeys } from '@/app/actions'
 import { Chat } from '@/components/chat'
@@ -28,6 +29,10 @@ export async function generateMetadata({
   }
 }
 
+const loadLibraries = React.cache(async (userId?: string) => {
+  return await getLibraries(userId)
+})
+
 export default async function ChatPage({ params }: ChatPageProps) {
   const session = (await auth()) as Session
   const missingKeys = await getMissingKeys()
@@ -47,6 +52,8 @@ export default async function ChatPage({ params }: ChatPageProps) {
     notFound()
   }
 
+  const libraries = await loadLibraries(userId)
+
   return (
     <AI initialAIState={{ chatId: chat.id, messages: chat.messages }}>
       <Chat
@@ -54,6 +61,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
         session={session}
         initialMessages={chat.messages}
         missingKeys={missingKeys}
+        libraries = {libraries}
       />
     </AI>
   )

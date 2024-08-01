@@ -1,5 +1,6 @@
 'use server'
 
+import { ResultCode } from '@/lib/utils'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
@@ -236,6 +237,42 @@ export async function refreshHistory(path: string) {
   redirect(path)
 }
 
+interface Result {
+  type: string
+  resultCode: ResultCode
+}
+
+export async function addChatToLibrary(
+  _prevState: Result | undefined,
+  formData: FormData
+): Promise<Result | undefined> {
+  const session = await auth()
+  if (!session?.user) {
+    return {
+      type: 'error',
+      resultCode: ResultCode.NotAuthenticated
+    }
+  }
+  const pipeline = kv.pipeline()
+  const libraryId = formData.get('libraryId')
+  const chatId = formData.get('chatId')
+  if(!libraryId || !chatId) {
+    return {
+      type: 'error',
+      resultCode: ResultCode.InvalidSubmission
+    }
+  }
+  pipeline.zadd(`library:threads:${libraryId}`, {
+    score: Date.now(),
+    member: `chat:${chatId}`
+  })
+  await pipeline.exec()
+  return {
+    type: 'success',
+    resultCode: ResultCode.ChatAddedToLibrary
+  }
+}
+
 export async function getMissingKeys() {
   const keysRequired = ['OPENAI_API_KEY']
   return keysRequired
@@ -243,7 +280,7 @@ export async function getMissingKeys() {
     .filter(key => key !== '')
 }
 
-export async function getCollections (userId?: string | null) {
+export async function getCollections(userId?: string | null) {
   if (!userId) {
     return []
   }
@@ -273,7 +310,6 @@ export async function getCollections (userId?: string | null) {
 
 export async function saveCollection(collection: Collection) {
   const session = await auth()
-
   if (session && session.user) {
     const pipeline = kv.pipeline()
     pipeline.hmset(`collection:${collection.id}`, collection)

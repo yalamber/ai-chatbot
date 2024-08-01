@@ -72,7 +72,8 @@ export enum ResultCode {
   UserLoggedIn = 'USER_LOGGED_IN',
   LibraryCreated = 'LIBRARY_CREATED',
   CollectionCreated = 'COLLECTION_CREATED',
-  NoCollection = 'NO_COLLECTION'
+  NoCollection = 'NO_COLLECTION',
+  ChatAddedToLibrary = 'CHAT_ADDED_TO_LIBRARY'
 }
 
 export const getMessageFromCode = (resultCode: string) => {
@@ -95,5 +96,7 @@ export const getMessageFromCode = (resultCode: string) => {
       return 'Collection created'
     case ResultCode.NoCollection:
       return 'Collection does not exists!'
+    case ResultCode.ChatAddedToLibrary:
+      return 'Chat added to library'
   }
 }
