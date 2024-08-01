@@ -254,15 +254,21 @@ export async function addChatToLibrary(
       resultCode: ResultCode.NotAuthenticated
     }
   }
+
   const pipeline = kv.pipeline()
-  const libraryId = formData.get('libraryId')
-  const chatId = formData.get('chatId')
+  const libraryId = formData.get('libraryId') as string
+  const chatId = formData.get('chatId') as string
+
   if(!libraryId || !chatId) {
     return {
       type: 'error',
       resultCode: ResultCode.InvalidSubmission
     }
   }
+  
+  const chat = await getChat(chatId, session.user.id) as Chat
+  saveChat(chat, libraryId)
+
   pipeline.zadd(`library:threads:${libraryId}`, {
     score: Date.now(),
     member: `chat:${chatId}`

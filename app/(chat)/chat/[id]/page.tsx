@@ -53,7 +53,6 @@ export default async function ChatPage({ params }: ChatPageProps) {
   }
 
   const libraries = await loadLibraries(userId)
-
   return (
     <AI initialAIState={{ chatId: chat.id, messages: chat.messages }}>
       <Chat
@@ -62,6 +61,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
         initialMessages={chat.messages}
         missingKeys={missingKeys}
         libraries = {libraries}
+        selectedLibrary = {chat?.libraryId}
       />
     </AI>
   )

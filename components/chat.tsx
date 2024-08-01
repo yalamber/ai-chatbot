@@ -19,6 +19,7 @@ export interface ChatProps extends React.ComponentProps<'div'> {
   session?: Session
   missingKeys: string[]
   libraries?: Array<any>
+  selectedLibrary?: string
 }
 
 export function Chat({
@@ -26,7 +27,8 @@ export function Chat({
   className,
   session,
   missingKeys,
-  libraries
+  libraries,
+  selectedLibrary
 }: ChatProps) {
   const router = useRouter()
   const path = usePathname()
@@ -71,7 +73,7 @@ export function Chat({
     >
       {libraries && (
         <div className="flex justify-end mr-2">
-          <AddToLibraryButton libraries={libraries} chatId={id} />
+          <AddToLibraryButton libraries={libraries} chatId={id} selectedLibrary={selectedLibrary} />
         </div>
       )}
       <div

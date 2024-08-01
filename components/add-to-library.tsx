@@ -17,7 +17,7 @@ import {
 import { getMessageFromCode } from '@/lib/utils'
 import { IconSpinner } from '@/components/ui/icons'
 
-export function AddToLibraryButton({ libraries, chatId }: {libraries: Array<any>, chatId: string}) {
+export function AddToLibraryButton({ libraries, chatId, selectedLibrary }: {libraries: Array<any>, chatId: string, selectedLibrary?: string}) {
   const [libraryCreateDialogOpen, setLibraryCreateDialogOpen] =
     React.useState(false)
   const router = useRouter()
@@ -81,7 +81,7 @@ export function AddToLibraryButton({ libraries, chatId }: {libraries: Array<any>
               <option selected>Choose a Library</option>
               {libraries?.length > 0 && libraries?.map((library, index) => {
                 return (
-                  <option key={`library-${index}`} value={library.id}>{library.name}</option>
+                  <option selected={library.id === selectedLibrary } key={`library-${index}`} value={library.id}>{library.name}</option>
                 )
               })}
             </select>
