@@ -18,10 +18,16 @@ export interface ChatProps extends React.ComponentProps<'div'> {
   id: string
   session?: Session
   missingKeys: string[]
-  libraries: Array<any>
+  libraries?: Array<any>
 }
 
-export function Chat({ id, className, session, missingKeys, libraries }: ChatProps) {
+export function Chat({
+  id,
+  className,
+  session,
+  missingKeys,
+  libraries
+}: ChatProps) {
   const router = useRouter()
   const path = usePathname()
   const [input, setInput] = useState('')
@@ -63,9 +69,11 @@ export function Chat({ id, className, session, missingKeys, libraries }: ChatPro
       className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
       ref={scrollRef}
     >
-      <div className="flex justify-end mr-2">
-        <AddToLibraryButton libraries={libraries} chatId={id}/>
-      </div>
+      {libraries && (
+        <div className="flex justify-end mr-2">
+          <AddToLibraryButton libraries={libraries} chatId={id} />
+        </div>
+      )}
       <div
         className={cn('pb-[200px] pt-4 md:pt-10', className)}
         ref={messagesRef}
