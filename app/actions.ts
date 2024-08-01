@@ -216,17 +216,18 @@ export async function saveChat(chat: Chat, libraryId?: string) {
 
   if (session && session.user) {
     const pipeline = kv.pipeline()
-    pipeline.hmset(`chat:${chat.id}`, chat)
-    pipeline.zadd(`user:chat:${chat.userId}`, {
-      score: Date.now(),
-      member: `chat:${chat.id}`
-    })
     if (libraryId) {
+      chat.libraryId = libraryId;
       pipeline.zadd(`library:threads:${libraryId}`, {
         score: Date.now(),
         member: `chat:${chat.id}`
       })
     }
+    pipeline.hmset(`chat:${chat.id}`, chat)
+    pipeline.zadd(`user:chat:${chat.userId}`, {
+      score: Date.now(),
+      member: `chat:${chat.id}`
+    })
     await pipeline.exec()
   } else {
     return
