@@ -541,7 +541,9 @@ export const AI = createAI<AIState, UIState>({
         messages,
         path
       }
-
+      if(libraryId) {
+        chat.libraryId = libraryId;
+      }
       await saveChat(chat, libraryId)
     } else {
       return
