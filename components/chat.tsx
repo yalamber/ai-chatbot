@@ -71,11 +71,6 @@ export function Chat({
       className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
       ref={scrollRef}
     >
-      {libraries && (
-        <div className="flex justify-end mr-2">
-          <AddToLibraryButton libraries={libraries} chatId={id} selectedLibrary={selectedLibrary} />
-        </div>
-      )}
       <div
         className={cn('pb-[200px] pt-4 md:pt-10', className)}
         ref={messagesRef}

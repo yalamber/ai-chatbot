@@ -41,7 +41,7 @@ export async function Libraries({ userId }: LibraryPageProps) {
                 </div>
               }
             >
-              <ThreadItems threads={threads} />
+              <ThreadItems threads={threads} libraries={libraries} />
             </React.Suspense>
           </div>
         </div>

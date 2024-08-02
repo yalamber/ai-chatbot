@@ -140,9 +140,12 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
       error: 'Unauthorized'
     }
   }
+  const chat = await getChat(id, session.user.id)
 
   await kv.del(`chat:${id}`)
   await kv.zrem(`user:chat:${session.user.id}`, `chat:${id}`)
+  
+  await kv.zrem(`library:threads:${chat?.libraryId}`,`chat:${id}`)
 
   revalidatePath('/')
   return revalidatePath(path)
@@ -211,14 +214,19 @@ export async function shareChat(id: string) {
   return payload
 }
 
-export async function saveChat(chat: Chat, libraryId?: string) {
+export async function saveChat(chat: Chat, libraryId?: string, libraryName?: string) {
   const session = await auth()
 
   if (session && session.user) {
     const pipeline = kv.pipeline()
     if (libraryId) {
-      chat.libraryId = libraryId;
+      chat.libraryId = libraryId
+      chat.libraryName = libraryName
       pipeline.zadd(`library:threads:${libraryId}`, {
+        score: Date.now(),
+        member: `chat:${chat.id}`
+      })
+      pipeline.zadd(`library:threads:${libraryName}`, {
         score: Date.now(),
         member: `chat:${chat.id}`
       })
@@ -258,6 +266,7 @@ export async function addChatToLibrary(
   const pipeline = kv.pipeline()
   const libraryId = formData.get('libraryId') as string
   const chatId = formData.get('chatId') as string
+  const library = await getLibrary(libraryId, session.user.id)
 
   if(!libraryId || !chatId) {
     return {
@@ -267,7 +276,7 @@ export async function addChatToLibrary(
   }
 
   const chat = await getChat(chatId, session.user.id) as Chat
-  await saveChat(chat, libraryId)
+  await saveChat(chat, libraryId, library?.name)
 
   pipeline.zadd(`library:threads:${libraryId}`, {
     score: Date.now(),

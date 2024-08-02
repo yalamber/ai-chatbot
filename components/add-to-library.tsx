@@ -17,7 +17,15 @@ import {
 import { getMessageFromCode } from '@/lib/utils'
 import { IconSpinner } from '@/components/ui/icons'
 
-export function AddToLibraryButton({ libraries, chatId, selectedLibrary }: {libraries: Array<any>, chatId: string, selectedLibrary?: string}) {
+export function AddToLibraryButton({
+  libraries,
+  chatId,
+  selectedLibrary
+}: {
+  libraries: Array<any>
+  chatId: string
+  selectedLibrary?: string
+}) {
   const [libraryCreateDialogOpen, setLibraryCreateDialogOpen] =
     React.useState(false)
   const router = useRouter()
@@ -43,24 +51,13 @@ export function AddToLibraryButton({ libraries, chatId, selectedLibrary }: {libr
         onClick={() => setLibraryCreateDialogOpen(true)}
       >
         <svg
-          fill="none"
-          version="1.1"
-          id="Capa_1"
-          width="20px"
-          height="20px"
-          viewBox="0 0 30.75 30.75"
-          stroke="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 256 256"
+          fill="currentColor"
+          width={15}
+          height={15}
         >
-          <g>
-            <path
-              d="M29.25,4.349H1.5c-0.829,0-1.5,0.672-1.5,1.5v19.053c0,0.828,0.671,1.5,1.5,1.5h27.75c0.829,0,1.5-0.672,1.5-1.5V5.849
-		C30.75,5.021,30.079,4.349,29.25,4.349z M27.75,23.398H3V7.347h24.75V23.398z M6.375,15.375c0-1.242,1.007-2.25,2.25-2.25
-		s2.25,1.008,2.25,2.25c0,1.242-1.007,2.25-2.25,2.25S6.375,16.616,6.375,15.375z M13.125,15.375c0-1.242,1.007-2.25,2.25-2.25
-		c1.242,0,2.25,1.008,2.25,2.25c0,1.242-1.008,2.25-2.25,2.25C14.132,17.624,13.125,16.616,13.125,15.375z M19.875,15.375
-		c0-1.242,1.007-2.25,2.25-2.25c1.242,0,2.25,1.008,2.25,2.25c0,1.242-1.008,2.25-2.25,2.25
-		C20.882,17.624,19.875,16.616,19.875,15.375z"
-            />
-          </g>
+          <path d="M224 128a8 8 0 0 1-8 8h-80v80a8 8 0 0 1-16 0v-80H40a8 8 0 0 1 0-16h80V40a8 8 0 0 1 16 0v80h80a8 8 0 0 1 8 8Z" />
         </svg>
       </Button>
       <Dialog
@@ -79,13 +76,20 @@ export function AddToLibraryButton({ libraries, chatId, selectedLibrary }: {libr
               className="peer block w-full rounded-md border bg-zinc-50 px-2 py-[9px] text-sm outline-none placeholder:text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950"
             >
               <option selected>Choose a Library</option>
-              {libraries?.length > 0 && libraries?.map((library, index) => {
-                return (
-                  <option selected={library.id === selectedLibrary } key={`library-${index}`} value={library.id}>{library.name}</option>
-                )
-              })}
+              {libraries?.length > 0 &&
+                libraries?.map((library, index) => {
+                  return (
+                    <option
+                      selected={library.id === selectedLibrary}
+                      key={`library-${index}`}
+                      value={library.id}
+                    >
+                      {library.name}
+                    </option>
+                  )
+                })}
             </select>
-            <input type='hidden' name='chatId' value={chatId} />
+            <input type="hidden" name="chatId" value={chatId} />
             <DialogFooter className="items-center">
               <CreateButton />
             </DialogFooter>

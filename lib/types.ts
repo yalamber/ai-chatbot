@@ -13,6 +13,7 @@ export interface Chat extends Record<string, any> {
   messages: Message[]
   sharePath?: string
   libraryId?: string
+  libraryName?: string
 }
 
 export type ServerActionResult<Result> = Promise<
