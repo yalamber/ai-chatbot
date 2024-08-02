@@ -40,12 +40,13 @@ export function ThreadItems({ threads }: ThreadItemsProps) {
                           <p className="text-sm font-semibold leading-6">
                             {thread.title}
                           </p>
-                          <p className="mt-1 truncate text-xs leading-5"></p>
+                          <p className="mt-1 truncate text-xs leading-5">
+                            <p className="mt-1 text-xs leading-5">3h ago</p>
+                          </p>
                         </Link>
                       </div>
                     </div>
                     <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                      <p className="mt-1 text-xs leading-5">3h ago</p>
                       <div className="flex">
                         <Button variant="ghost">
                           <IconPlus />
