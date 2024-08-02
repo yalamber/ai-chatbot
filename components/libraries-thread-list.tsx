@@ -35,7 +35,6 @@ interface ThreadItemsProps {
 export function ThreadItems({ threads, libraries }: ThreadItemsProps) {
   const router = useRouter()
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
-  const [shareDialogOpen, setShareDialogOpen] = React.useState(false)
   const [isRemovePending, startRemoveTransition] = React.useTransition()
   if (!threads?.length) return null
   return (
