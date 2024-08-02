@@ -4,7 +4,7 @@ import { Chat } from '@/lib/types'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Button } from '@/components/ui/button'
-import { IconPlus, IconTrash } from '@/components/ui/icons'
+import { IconPlus, IconTrash, IconEllipsis } from '@/components/ui/icons'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,7 +52,9 @@ export function ThreadItems({ threads }: ThreadItemsProps) {
                         </Button>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost">...</Button>
+                            <Button variant="ghost">
+                              <IconEllipsis />
+                            </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent
                             sideOffset={8}
